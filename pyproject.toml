@@ -3,6 +3,7 @@ name = "persistent-bundles"
 version = "0.1.0"
 description = "Save and load versioned Python object bundles with metadata."
 readme = "README.md"
+license = "Unlicense"
 authors = [
     { name = "Valter Schütz", email = "valterschutz@proton.me" }
 ]
@@ -12,6 +13,7 @@ keywords = ["bundles", "persistence", "serialization", "versioning"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
+    "License :: OSI Approved :: The Unlicense (Unlicense)",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.13",
     "Typing :: Typed",
