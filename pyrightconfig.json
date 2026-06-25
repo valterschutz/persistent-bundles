@@ -1,0 +1,20 @@
+{
+  "include": ["src", "tests"],
+  "exclude": ["**/*_nb.py"],
+  "executionEnvironments": [
+    {
+      "root": "tests",
+      "reportMissingParameterType": false,
+      "reportUnknownParameterType": false
+    }
+  ],
+  "reportPrivateImportUsage": false,
+  "reportUnknownMemberType": false,
+  "reportUnusedCallResult": false,
+  "reportUnknownVariableType": false,
+  "reportAny": false,
+  "reportMissingTypeStubs": false,
+  "reportUnknownArgumentType": false,
+  "reportUninitializedInstanceVariable": false,
+  "reportUnannotatedClassAttribute": false,
+}
