@@ -3,7 +3,9 @@ import json
 from pathlib import Path
 from typing import Any
 
+from persistent_bundles.exceptions import IncompatibleBundleVersionError
 from persistent_bundles.types import Loadable, Savable
+from persistent_bundles.utils import is_same_major_semver
 
 
 def save_bundle(
@@ -19,7 +21,13 @@ def save_bundle(
     obj.save(object_path)
 
     with (path / "manifest.json").open("w") as f:
-        json.dump({"class_name": obj.__class__.__name__}, f)
+        json.dump(
+            {
+                "class_name": obj.__class__.__name__,
+                "class_version": obj.get_class_version(),
+            },
+            f,
+        )
 
     if metadata is not None:
         with (path / "metadata.json").open("w") as f:
@@ -34,9 +42,19 @@ def load_bundle(
     assert str(path).endswith(".bundle")
 
     with (path / "manifest.json").open("r") as f:
-        class_name = json.load(f)["class_name"]
+        manifest = json.load(f)
 
-    obj = class_mapping[class_name].load(path / "object")
+    class_name = manifest["class_name"]
+    class_to_be_loaded = class_mapping[class_name]
+    current_class_version = class_to_be_loaded.get_class_version()
+    saved_class_version = manifest["class_version"]
+
+    if not is_same_major_semver(saved_class_version, current_class_version):
+        raise IncompatibleBundleVersionError(
+            "The loaded bundle does not have the same major class version as the current class"
+        )
+
+    obj = class_to_be_loaded.load(path / "object")
 
     if (path / "metadata.json").exists():
         with (path / "metadata.json").open("r") as f:
