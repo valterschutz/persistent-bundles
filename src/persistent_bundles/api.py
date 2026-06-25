@@ -37,6 +37,7 @@ def save_bundle(
 def load_bundle(
     path: Path,
     class_mapping: Mapping[str, type[Loadable]],
+    accept_incompatible_classes: bool = False,
 ) -> tuple[Loadable, Mapping[str, Any]]:  # pyright: ignore[reportExplicitAny]
     """Load a bundle object, returning both the object and metadata."""
     assert str(path).endswith(".bundle")
@@ -49,7 +50,9 @@ def load_bundle(
     current_class_version = class_to_be_loaded.get_class_version()
     saved_class_version = manifest["class_version"]
 
-    if not is_same_major_semver(saved_class_version, current_class_version):
+    if not accept_incompatible_classes and not is_same_major_semver(
+        saved_class_version, current_class_version
+    ):
         raise IncompatibleBundleVersionError(
             "The loaded bundle does not have the same major class version as the current class"
         )

@@ -75,3 +75,13 @@ def test_cannot_load_incompatible_class_versions(tmp_path: Path):
         IncompatibleBundleVersionError, match="same major class version"
     ):
         load_bundle(tmp_path / "obj.bundle", INCOMPATIBLE_CLASSES)
+
+
+def test_can_load_incompatible_class_versions_if_forced(tmp_path: Path):
+    obj = MyObject(number=42)
+    save_bundle(obj, tmp_path / "obj.bundle")
+    del obj
+
+    load_bundle(
+        tmp_path / "obj.bundle", INCOMPATIBLE_CLASSES, accept_incompatible_classes=True
+    )
