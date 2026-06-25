@@ -18,8 +18,8 @@ def save_bundle(
     object_path.mkdir(parents=True)
     obj.save(object_path)
 
-    with (path / "class_name.txt").open("w") as f:
-        f.write(obj.__class__.__name__)
+    with (path / "manifest.json").open("w") as f:
+        json.dump({"class_name": obj.__class__.__name__}, f)
 
     if metadata is not None:
         with (path / "metadata.json").open("w") as f:
@@ -33,8 +33,8 @@ def load_bundle(
     """Load a bundle object, returning both the object and metadata."""
     assert str(path).endswith(".bundle")
 
-    with (path / "class_name.txt").open("r") as f:
-        class_name = f.read()
+    with (path / "manifest.json").open("r") as f:
+        class_name = json.load(f)["class_name"]
 
     obj = class_mapping[class_name].load(path / "object")
 
