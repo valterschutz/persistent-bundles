@@ -13,6 +13,7 @@
   "reportUnknownMemberType": false,
   "reportUnusedCallResult": false,
   "reportUnknownVariableType": false,
+  "reportExplicitAny": false,
   "reportAny": false,
   "reportMissingTypeStubs": false,
   "reportUnknownArgumentType": false,

@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from typing import Self
+from typing import Self, cast
 
 import pytest
 from typing_extensions import override
@@ -14,8 +14,9 @@ from persistent_bundles.types import Loadable, Savable
 
 
 class MyObject(Savable, Loadable):
-    def __init__(self, number: int):
+    def __init__(self, number: int, extra_arg: int | None = None):
         self.number: int = number
+        self.extra_arg = extra_arg
 
     @override
     def save(self, path: Path) -> None:
@@ -24,11 +25,12 @@ class MyObject(Savable, Loadable):
 
     @classmethod
     @override
-    def load(cls, path: Path) -> Self:
+    def load(cls, path: Path, extra_arg: int | None = None) -> Self:
         with (path / "number.json").open("r") as f:
             d = json.load(f)
         obj = cls.__new__(cls)
         obj.number = d["number"]
+        obj.extra_arg = extra_arg
         return obj
 
     @classmethod
@@ -86,3 +88,13 @@ def test_can_load_incompatible_class_versions_if_forced(tmp_path: Path):
     load_bundle(
         tmp_path / "obj.bundle", INCOMPATIBLE_CLASSES, accept_incompatible_classes=True
     )
+
+
+def test_kwargs_passed_during_load(tmp_path: Path):
+    obj = MyObject(number=42)
+    save_bundle(obj, tmp_path / "obj.bundle")
+    del obj
+    obj, _ = load_bundle(tmp_path / "obj.bundle", REGISTERED_CLASSES, extra_arg=8)
+    obj = cast("MyObject", obj)
+
+    assert obj.extra_arg == 8

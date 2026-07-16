@@ -11,7 +11,7 @@ from persistent_bundles.utils import is_same_major_semver
 def save_bundle(
     obj: Savable,
     path: Path,
-    metadata: Mapping[str, Any] | None = None,  # pyright: ignore[reportExplicitAny]
+    metadata: Mapping[str, Any] | None = None,
 ) -> None:
     """Save an object and the metadata needed to load it later."""
     assert str(path).endswith(".bundle")
@@ -38,7 +38,8 @@ def load_bundle(
     path: Path,
     class_mapping: Mapping[str, type[Loadable]],
     accept_incompatible_classes: bool = False,
-) -> tuple[Loadable, Mapping[str, Any]]:  # pyright: ignore[reportExplicitAny]
+    **kwargs,  # pyright: ignore[reportUnknownParameterType, reportMissingParameterType]
+) -> tuple[Loadable, Mapping[str, Any]]:
     """Load a bundle object, returning both the object and metadata."""
     assert str(path).endswith(".bundle")
 
@@ -57,7 +58,7 @@ def load_bundle(
             "The loaded bundle does not have the same major class version as the current class"
         )
 
-    obj = class_to_be_loaded.load(path / "object")
+    obj = class_to_be_loaded.load(path / "object", **kwargs)
 
     if (path / "metadata.json").exists():
         with (path / "metadata.json").open("r") as f:
