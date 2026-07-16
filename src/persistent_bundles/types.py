@@ -13,7 +13,7 @@ class Savable(Protocol):
 
 class Loadable(Protocol):
     @classmethod
-    def load(cls, path: Path) -> Self: ...
+    def load(cls, path: Path, **kwargs) -> Self: ...  # pyright: ignore[reportUnknownParameterType, reportMissingParameterType]
 
     @classmethod
     def get_class_version(cls) -> str:
