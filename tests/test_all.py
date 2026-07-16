@@ -1,15 +1,16 @@
 import json
 from pathlib import Path
-from typing import Self, override
+from typing import Self
 
 import pytest
+from typing_extensions import override
 
 from persistent_bundles.api import (
     load_bundle,
     save_bundle,
 )
 from persistent_bundles.exceptions import IncompatibleBundleVersionError
-from persistent_bundles.types import Savable, Loadable
+from persistent_bundles.types import Loadable, Savable
 
 
 class MyObject(Savable, Loadable):

@@ -1,7 +1,10 @@
 import json
 from pathlib import Path
-from typing import ClassVar, Self, override
-from persistent_bundles.types import Savable, Loadable
+from typing import ClassVar, Self
+
+from typing_extensions import override
+
+from persistent_bundles.types import Loadable, Savable
 
 
 class JsonAttributeBundle(Savable, Loadable):
